@@ -66,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(EXTRA_MESSAGE, CreateFullInfo());
+        Bundle infoBundle = new Bundle();
+        infoBundle.putString("StudentName",uName.getText().toString());
+        infoBundle.putString("StudentGrade",uGrade.getText().toString());
+        infoBundle.putString("StudentID",uID.getText().toString());
+        intent.putExtras(infoBundle);
         startActivity((intent));
     }
+
 }
+//https://www.tutorialspoint.com/sqlite/sqlite_where_clause.htm

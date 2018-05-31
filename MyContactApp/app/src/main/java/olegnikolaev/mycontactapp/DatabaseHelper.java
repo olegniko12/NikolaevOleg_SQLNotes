@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         SQLiteDatabase db = this.getWritableDatabase(); //Delete later on
@@ -68,7 +69,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d("MyContactApp", "Databasehelper: Contact insert passed");
             return true;
         }
-        int s = COLUMN_NAME_CONTACT._ID;
+    }
+
+    public void searchData(String name, String grade){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if (name != null){
+            if (grade != null){
+                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = " + name + " AND " + COLUMN_NAME_GRADE + " = " + grade);
+            } else {
+                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = " + name);
+            }
+        } else {
+            if (grade != null){
+                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_GRADE + " = " + grade);
+            }
+        }
     }
 
     //https://stackoverflow.com/questions/29292569/android-how-can-i-search-data-in-sqlite-database-and-display-it-in-listview
