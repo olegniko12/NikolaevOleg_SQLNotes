@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+import android.database.Cursor;
+import android.widget.CursorAdapter;
 
 import java.util.ArrayList;
 
@@ -66,10 +68,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d("MyContactApp", "Databasehelper: Contact insert passed");
             return true;
         }
+        int s = COLUMN_NAME_CONTACT._ID;
     }
 
-    Cursor cursor;
-
-    cursor = db.raqQuery("SELECT * FROM " + )
     //https://stackoverflow.com/questions/29292569/android-how-can-i-search-data-in-sqlite-database-and-display-it-in-listview
 }
