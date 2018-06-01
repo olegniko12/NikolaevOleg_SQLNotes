@@ -2,6 +2,7 @@ package olegnikolaev.mycontactapp;
 
 import android.R.*;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     public String CreateFullInfo(){
 
         String newString = "";
@@ -70,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
         infoBundle.putString("StudentName",uName.getText().toString());
         infoBundle.putString("StudentGrade",uGrade.getText().toString());
         infoBundle.putString("StudentID",uID.getText().toString());
+        infoBundle.putStringArrayList("ReturnList", dbHelper.searchData(uName.getText().toString(), uGrade.getText().toString()));
         intent.putExtras(infoBundle);
         startActivity((intent));
     }
+
+
 
 }
 //https://www.tutorialspoint.com/sqlite/sqlite_where_clause.htm

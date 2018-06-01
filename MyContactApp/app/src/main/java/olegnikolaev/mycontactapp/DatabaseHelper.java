@@ -4,14 +4,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.database.Cursor;
+import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -28,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ID +  " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COLUMN_NAME_CONTACT + " TEXT," +
                     COLUMN_NAME_GRADE + " TEXT," +
-                    COLUMN_NAME_STUDENTID + " TEXT)";
+                    COLUMN_NAME_STUDENTID + " TEXT);";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -71,20 +75,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void searchData(String name, String grade){
+    public ArrayList<String> searchData(String name, String grade){
+
         SQLiteDatabase db = this.getWritableDatabase();
 
-        if (name != null){
-            if (grade != null){
-                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = " + name + " AND " + COLUMN_NAME_GRADE + " = " + grade);
+        String query;
+
+        Log.d("MyContactApp", "Retrieving data");
+
+        if (name != ""){
+            if (grade != ""){
+                query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = '" + name + "' AND " + COLUMN_NAME_GRADE + " = '" + grade + "'");
             } else {
-                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = " + name);
+                query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = '" + name+ "'");
             }
         } else {
-            if (grade != null){
-                db.execSQL("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_GRADE + " = " + grade);
+            if (grade != ""){
+                query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_GRADE + " = '" + grade + "'");
+            } else {
+                query = ("SELECT * FROM " + TABLE_NAME);
             }
         }
+
+        Cursor cursor = db.rawQuery(query,null);
+        ArrayList<String> infoList = new ArrayList<String>();
+
+        if (cursor.getCount()>0){
+            while(cursor.moveToNext()){
+                infoList.add(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CONTACT)));
+            }
+        } else {
+            Log.d("DatabaseHelper", "No data found");
+        }
+
+        return  infoList;
+
     }
 
     //https://stackoverflow.com/questions/29292569/android-how-can-i-search-data-in-sqlite-database-and-display-it-in-listview
