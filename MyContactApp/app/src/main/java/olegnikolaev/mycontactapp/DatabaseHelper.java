@@ -75,7 +75,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> searchData(String name, String grade){
+    public void addData(String name, String grade, String sid){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO " + TABLE_NAME + " VALUES ('" + name + "', '" + grade + "', '" + sid + "');");
+        Log.d("MyContactApp", "Databasehelper: adding data");
+    }
+
+    public Cursor searchData(String name, String grade){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -96,20 +102,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 query = ("SELECT * FROM " + TABLE_NAME);
             }
         }
-
+        Log.d("DatabaseHelper", "searchData: QUERY: " + query);
         Cursor cursor = db.rawQuery(query,null);
-        ArrayList<String> infoList = new ArrayList<String>();
-
-        if (cursor.getCount()>0){
-            while(cursor.moveToNext()){
-                infoList.add(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CONTACT)));
-            }
-        } else {
-            Log.d("DatabaseHelper", "No data found");
-        }
-
-        return  infoList;
-
+        return cursor;
     }
 
     //https://stackoverflow.com/questions/29292569/android-how-can-i-search-data-in-sqlite-database-and-display-it-in-listview

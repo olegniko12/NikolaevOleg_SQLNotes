@@ -2,6 +2,7 @@ package olegnikolaev.mycontactapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
@@ -29,23 +30,10 @@ public class SearchActivity extends AppCompatActivity {
         android.widget.TextView textView = findViewById(R.id.textViewInfo);
         textView.setText(message);
 
-        Bundle b = getIntent().getExtras();
 
-        sName = b.getString("StudentName");
-        sGrade = b.getString("StudentGrade");
-        sID = b.getString("StudentID");
-        infoList = b.getStringArrayList("ReturnList");
-        updateView();
-    }
-
-    public void updateView (){
-        final ListView listView = findViewById(R.id.infoDisplay);
-        CheckedTextView cTextView = findViewById(R.id.checkedText);
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_search, R.id.checkedText , infoList);
-        listView.setAdapter(arrayAdapter);
 
     }
+
 
  //Should only display results, not actually search.
 

@@ -4,10 +4,12 @@ import android.R.*;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,15 +46,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SaveInfo(View view){
-        dbHelper.insertData(uName.toString(), uGrade.toString(), uID.toString());
+        dbHelper.insertData(uName.getText().toString(), uGrade.getText().toString(), uID.getText().toString());
+        //dbHelper.addData(uName.getText().toString(), uGrade.getText().toString(), uID.getText().toString());
         Log.d("MyContactApp", "MainActivity: inserted data from text input");
     }
 
     public void showMessage(String  title, String message){
-
+        Log.d("MyContactApp", "MainActivity: showMessage: assembling AlertDialog");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
-
-
 
     public String CreateFullInfo(){
 
@@ -65,7 +71,35 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.olegnikolaev.mycontactapp.MESSAGE";
 
+
     public void SearchRecord(View view){
+
+        Cursor cursor = dbHelper.searchData(uName.getText().toString(), uGrade.getText().toString());
+        Intent intent = new Intent(this, SearchActivity.class);
+        StringBuffer buffer = new StringBuffer();
+        int results = 0;
+        while ((cursor.moveToNext())){
+            if(cursor.getString(1).equals(uName.getText().toString())){
+                Log.d("MyContactApp", "MainActivity: getting name");
+                buffer.append("\nName: " + cursor.getString(1));
+                Log.d("MyContactApp", "MainActivity: getting grade");
+                buffer.append("\nGrade: " + cursor.getString(2));
+                Log.d("MyContactApp", "MainActivity: getting SID");
+                buffer.append("\nStudentID: " + cursor.getString(3));
+                Log.d("MyContactApp", "MainActivity: full append: \n" + buffer.toString());
+                results++;
+            }
+            Toast.makeText(this, "Full append:", Toast.LENGTH_SHORT);
+        }
+
+        if(results == 0){
+            Toast.makeText(this, "No results found", Toast.LENGTH_SHORT);
+        }
+
+        intent.putExtra(EXTRA_MESSAGE, buffer.toString());
+        startActivity(intent);
+
+        /*
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(EXTRA_MESSAGE, CreateFullInfo());
@@ -76,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
         infoBundle.putStringArrayList("ReturnList", dbHelper.searchData(uName.getText().toString(), uGrade.getText().toString()));
         intent.putExtras(infoBundle);
         startActivity((intent));
+        */
     }
+
 
 
 
