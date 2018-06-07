@@ -1,5 +1,6 @@
 package olegnikolaev.mycontactapp;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,8 @@ public class SearchActivity extends AppCompatActivity {
     private String sID;
     private ArrayList<String> infoList;
 
+    MainActivity mainActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +33,19 @@ public class SearchActivity extends AppCompatActivity {
         android.widget.TextView textView = findViewById(R.id.textViewInfo);
         textView.setText(message);
 
+        mainActivity = new MainActivity();
 
+        showMessage("Contacts", intent.getStringExtra("Results"));
 
+    }
+
+    public void showMessage(String  title, String message){
+        Log.d("MyContactApp", "SearchActivity: showMessage: assembling AlertDialog");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
 

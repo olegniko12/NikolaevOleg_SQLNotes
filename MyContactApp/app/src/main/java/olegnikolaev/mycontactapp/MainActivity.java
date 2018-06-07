@@ -79,21 +79,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MyContactApp", "MainActivity: getting grade");
                 buffer.append("\nGrade: " + cursor.getString(2));
                 Log.d("MyContactApp", "MainActivity: getting SID");
-                buffer.append("\nStudentID: " + cursor.getString(3));
+                buffer.append("\nStudentID: " + cursor.getString(3) + "\n");
                 Log.d("MyContactApp", "MainActivity: full append: \n" + buffer.toString());
                 results++;
             }
 
             Toast.makeText(this, "Full append:", Toast.LENGTH_SHORT);
         }
-        showMessage("Contacts", buffer.toString());
+
 
         if(results == 0){
             Toast.makeText(this, "No results found", Toast.LENGTH_SHORT);
         }
-
+        intent.putExtra("Results", buffer.toString());
         intent.putExtra(EXTRA_MESSAGE, buffer.toString());
-        //startActivity(intent);
+        startActivity(intent);
 
         /*
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");
