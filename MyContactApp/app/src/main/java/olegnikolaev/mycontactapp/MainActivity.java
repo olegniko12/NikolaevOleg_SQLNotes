@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
     EditText uGrade;
     EditText uID;
 
-    EditText[] inputArray = new EditText[3];
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,16 +31,21 @@ public class MainActivity extends AppCompatActivity {
         uID = findViewById(R.id.studentID);
 
         Log.d("MyContactApp", "MainActivity: instantiated user info");
-
-        inputArray[0] = uName;
-        inputArray[1] = uGrade;
-        inputArray[2] = uID;
     }
 
     public void ClearInputs(View view){
-        for (EditText eT: inputArray){
-            eT.setText("");
+        if (uName.getText().toString().equals("")){
+            Log.d("MyContactApp","MainActivity: " +uName.getText().toString() + " " + uGrade.getText().toString());
         }
+
+        uName.setText("");
+        uGrade.setText("");
+        uID.setText("");
+
+    }
+
+    public void ClearDataBase(View v){
+        dbHelper.ClearDatabase();
     }
 
     public void SaveInfo(View view){
@@ -58,15 +61,6 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(title);
         builder.setMessage(message);
         builder.show();
-    }
-
-    public String CreateFullInfo(){
-
-        String newString = "";
-        for (EditText eT: inputArray){
-            newString += eT.getText().toString() + " ";
-        }
-        return newString;
     }
 
     public static final String EXTRA_MESSAGE = "com.example.olegnikolaev.mycontactapp.MESSAGE";
@@ -89,15 +83,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MyContactApp", "MainActivity: full append: \n" + buffer.toString());
                 results++;
             }
+
             Toast.makeText(this, "Full append:", Toast.LENGTH_SHORT);
         }
+        showMessage("Contacts", buffer.toString());
 
         if(results == 0){
             Toast.makeText(this, "No results found", Toast.LENGTH_SHORT);
         }
 
         intent.putExtra(EXTRA_MESSAGE, buffer.toString());
-        startActivity(intent);
+        //startActivity(intent);
 
         /*
         Log.d("MyContactApp", "MainActivity: Launching SearchActivity");

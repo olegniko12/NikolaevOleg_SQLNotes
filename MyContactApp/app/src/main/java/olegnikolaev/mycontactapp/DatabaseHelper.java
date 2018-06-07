@@ -37,11 +37,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         SQLiteDatabase db = this.getWritableDatabase(); //Delete later on
         Log.d("MyContactApp", "Databasehelper: constructed Databasehelper");
+    }
+
+    public void ClearDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void addData(String name, String grade, String sid){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("INSERT INTO " + TABLE_NAME + " VALUES ('" + name + "', '" + grade + "', '" + sid + "');");
+        db.execSQL("INSERT INTO " + TABLE_NAME + " VALUES ('" + name + "', '" + grade + "', '" + sid + "')");
         Log.d("MyContactApp", "Databasehelper: adding data");
     }
 
@@ -89,14 +94,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d("MyContactApp", "Retrieving data");
 
-        if (name != ""){
-            if (grade != ""){
+        if (name.length() > 0){
+            if (grade.length() > 0){
                 query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = '" + name + "' AND " + COLUMN_NAME_GRADE + " = '" + grade + "'");
+                Log.d("MyContactApp", "DatabaseHelper: Searching Data with the name and grade");
             } else {
                 query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_CONTACT + " = '" + name+ "'");
             }
         } else {
-            if (grade != ""){
+            if (grade.length() > 0){
                 query = ("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_NAME_GRADE + " = '" + grade + "'");
             } else {
                 query = ("SELECT * FROM " + TABLE_NAME);
@@ -107,5 +113,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    //https://stackoverflow.com/questions/29292569/android-how-can-i-search-data-in-sqlite-database-and-display-it-in-listview
 }
